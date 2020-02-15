@@ -66,7 +66,10 @@ class DeepLab(nn.Module):
                                 yield p
 
     def get_10x_lr_params(self):
-        modules = [self.aspp, self.decoder, self.kinematic_layer]
+        if self.args.use_kinematic:
+            modules = [self.aspp, self.decoder, self.kinematic_layer]
+        elif not self.args.use_kinematic:
+            modules = [self.aspp, self.decoder]
         for i in range(len(modules)):
             for m in modules[i].named_modules():
                 if self.freeze_bn:

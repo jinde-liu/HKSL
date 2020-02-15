@@ -1,8 +1,11 @@
+from args import Args_occ5000
 class Path(object):
     @staticmethod
     def db_root_dir(dataset):
         if dataset == 'occ5000':
-            return '/home/kidd/kidd1/Occ5000'
+            args = Args_occ5000()
+            #return '/home/kidd/kidd1/Occ5000'
+            return args.dataset_path
         elif dataset == 'pascal':
             return '/home/kidd/kidd1/VOCtrainval_11-May-2012/VOCdevkit/VOC2012/'  # folder that contains VOCdevkit/.
         elif dataset == 'sbd':

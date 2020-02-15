@@ -74,6 +74,11 @@ class Saver(object):
         p['epoch'] = self.args.epochs
         p['base_size'] = self.args.base_size
         p['crop_size'] = self.args.crop_size
+        p['use_kinematic'] = self.args.use_kinematic
+        p['checkname'] = self.args.checkname
+        p['batch_size'] = self.args.batch_size
+        p['dataset_path'] = self.args.dataset_path
+        p['start_epoch'] = self.args.start_epoch
 
         for key, val in p.items():
             log_file.write(key + ':' + str(val) + '\n')

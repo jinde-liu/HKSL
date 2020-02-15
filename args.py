@@ -39,8 +39,8 @@ class Args_occ5000(object):
         self.dataset = 'occ5000'
         self.use_sbd = False
         self.workers = 4
-        self.base_size = (1361, 305)  # scale on base_size from 0.5 to 2.0, should set to be same as image size
-        self.crop_size = (1361, 305)  # [h_crop, w_crop], crop_size = k * output_stride + 1, make crop_size as large as you can
+        self.base_size = (689, 161)#(1361, 305)  # scale on base_size from 0.5 to 2.0, should set to be same as image size
+        self.crop_size = (689, 161)#(1361, 305)  # [h_crop, w_crop], crop_size = k * output_stride + 1, make crop_size as large as you can
         self.scale_ratio = (0.5, 2.0)  # random scale from 0.5 to 2.0
         self.sync_bn = None
         self.freeze_bn = False
@@ -58,11 +58,17 @@ class Args_occ5000(object):
         self.ft = False
         self.eval_interval = 1  # eval on eval set interval
         self.no_val = False
+        self.network = 'deeplab' #'hksl'
         # commonly used parameters
+        # if self.network == 'deeplab':
+        #     self.use_kinematic = False
+        # elif self.network == 'hksl':
+        #     self.use_kinematic = True
         self.use_kinematic = False
         self.no_flip = True  # flip images
         self.epochs = 50
-        self.checkname = 'deeplab_v3+_noflip_kinematic'
+        self.checkname = 'deeplab_v3+_noflip_occ5000_half_size'
         self.gpu_ids = '0'
         self.start_epoch = 0
         self.batch_size = 2
+        self.dataset_path = '/home/kidd/kidd1/Occ5000_half_size'

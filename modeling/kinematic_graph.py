@@ -35,10 +35,10 @@ class _Block_with_one_input(nn.Module):
                                          BatchNorm(256),
                                          nn.ReLU(),
                                          nn.Dropout(0.5))
-        # self.conv_block2 = nn.Sequential(nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1, bias=False),
-        #                                BatchNorm(256),
-        #                                nn.ReLU(),
-        #                                nn.Dropout(0.1))
+        self.conv_block2 = nn.Sequential(nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1, bias=False),
+                                       BatchNorm(256),
+                                       nn.ReLU(),
+                                       nn.Dropout(0.1))
         self.conv2 = nn.Conv2d(256, 1, kernel_size=1, stride=1)
         self.conv3 = nn.Conv2d(1, 48, 1, bias=False)
 
@@ -49,6 +49,7 @@ class _Block_with_one_input(nn.Module):
         # x1 = self.conv_block2(x)
         # x = self.conv3(x1)
         x = self.conv_block1(x)
+        x = self.conv_block2(x)
         x = self.conv2(x)
         x1 = self.conv3(x)
         return x, x1
@@ -74,10 +75,10 @@ class _Block_with_two_input(nn.Module):
                                          BatchNorm(256),
                                          nn.ReLU(),
                                          nn.Dropout(0.5))
-        # self.conv_block2 = nn.Sequential(nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1, bias=False),
-        #                                BatchNorm(256),
-        #                                nn.ReLU(),
-        #                                nn.Dropout(0.1))
+        self.conv_block2 = nn.Sequential(nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1, bias=False),
+                                       BatchNorm(256),
+                                       nn.ReLU(),
+                                       nn.Dropout(0.1))
         self.conv2 = nn.Conv2d(256, 1, kernel_size=1, stride=1)
         self.conv3 = nn.Conv2d(1, 48, 1, bias=False)
         self._init_weight()
@@ -88,6 +89,7 @@ class _Block_with_two_input(nn.Module):
         # x1 = self.conv_block2(x)
         # x = self.conv3(x1)
         x = self.conv_block1(x)
+        x = self.conv_block2(x)
         x = self.conv2(x)
         x1 = self.conv3(x)
         return x, x1
