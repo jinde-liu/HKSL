@@ -185,7 +185,7 @@ class Trainer(object):
 ################################################################
 def main():
     import args
-    args = args.Args_occ5000()
+    args = args.Args_cihp()
 
     args.cuda = not args.no_cuda and torch.cuda.is_available()
     if args.cuda:
@@ -221,6 +221,7 @@ def main():
             'cityscapes': 0.01,
             'pascal': 0.007,
             'occ5000': 0.007,
+            'cihp': 0.007,
         }
         args.lr = lrs[args.dataset.lower()] / (4 * len(args.gpu_ids)) * args.batch_size
 

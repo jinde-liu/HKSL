@@ -77,7 +77,6 @@ class Saver(object):
         p['use_kinematic'] = self.args.use_kinematic
         p['checkname'] = self.args.checkname
         p['batch_size'] = self.args.batch_size
-        p['dataset_path'] = self.args.dataset_path
         p['start_epoch'] = self.args.start_epoch
 
         for key, val in p.items():

@@ -1,4 +1,4 @@
-from dataloaders.datasets import cityscapes, coco, combine_dbs, pascal, sbd, occ5000
+from dataloaders.datasets import cityscapes, coco, combine_dbs, pascal, sbd, occ5000, cihp
 from torch.utils.data import DataLoader
 
 def make_data_loader(args, **kwargs):
@@ -7,6 +7,16 @@ def make_data_loader(args, **kwargs):
     if args.dataset == 'occ5000':
         train_set = occ5000.Occ5000Segmentation(args, split='train_all2500')
         val_set = occ5000.Occ5000Segmentation(args, split='val_all2500')
+        num_class = train_set.NUM_CLASSES
+
+        train_loader = DataLoader(train_set, batch_size=args.batch_size, shuffle=True, **kwargs)
+        val_loader = DataLoader(val_set, batch_size=args.batch_size, shuffle=False, **kwargs)
+        test_loader = None
+
+        return train_loader, val_loader, test_loader, num_class
+    elif args.dataset == 'cihp':
+        train_set = cihp.CIHPSegmentation(args, split='train')
+        val_set = cihp.CIHPSegmentation(args, split='val')
         num_class = train_set.NUM_CLASSES
 
         train_loader = DataLoader(train_set, batch_size=args.batch_size, shuffle=True, **kwargs)

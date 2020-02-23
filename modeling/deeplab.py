@@ -34,7 +34,7 @@ class DeepLab(nn.Module):
         x, low_level_feat = self.backbone(input)
         x = self.aspp(x)
         x = self.decoder(x, low_level_feat)
-        if self.args.use_kinematic == False:
+        if not self.args.use_kinematic:
             x = F.interpolate(x, size=input.size()[2:], mode='bilinear', align_corners=True)
         else:
             x = self.kinematic_layer(x)

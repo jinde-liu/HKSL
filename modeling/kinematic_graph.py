@@ -36,11 +36,12 @@ class _Block_with_one_input(nn.Module):
                                          nn.ReLU(),
                                          nn.Dropout(0.5))
         self.conv_block2 = nn.Sequential(nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1, bias=False),
-                                       BatchNorm(256),
-                                       nn.ReLU(),
-                                       nn.Dropout(0.1))
+                                         BatchNorm(256),
+                                         nn.ReLU(),
+                                         nn.Dropout(0.1))
         self.conv2 = nn.Conv2d(256, 1, kernel_size=1, stride=1)
-        self.conv3 = nn.Conv2d(1, 48, 1, bias=False)
+        # self.conv3 = nn.Conv2d(1, 48, 1, bias=False)
+        self.conv3 = nn.Conv2d(1, 96, 1, bias=False)
 
         self._init_weight()
 
@@ -76,11 +77,13 @@ class _Block_with_two_input(nn.Module):
                                          nn.ReLU(),
                                          nn.Dropout(0.5))
         self.conv_block2 = nn.Sequential(nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1, bias=False),
-                                       BatchNorm(256),
-                                       nn.ReLU(),
-                                       nn.Dropout(0.1))
+                                         BatchNorm(256),
+                                         nn.ReLU(),
+                                         nn.Dropout(0.1))
         self.conv2 = nn.Conv2d(256, 1, kernel_size=1, stride=1)
-        self.conv3 = nn.Conv2d(1, 48, 1, bias=False)
+        # self.conv3 = nn.Conv2d(1, 48, 1, bias=False)
+        self.conv3 = nn.Conv2d(1, 96, 1, bias=False)
+
         self._init_weight()
 
     def forward(self, x, y):
@@ -121,16 +124,16 @@ class Kinematic_graph(nn.Module):
 
         # build modules for every human part in the 'kinematic graph'
         self.torso = _Block_with_one_input(input_dim=304, BatchNorm=BatchNorm)
-        self.face = _Block_with_two_input(input_dim=352, BatchNorm=BatchNorm)
-        self.hair = _Block_with_two_input(input_dim=352, BatchNorm=BatchNorm)
-        self.left_arm = _Block_with_two_input(input_dim=352, BatchNorm=BatchNorm)
-        self.right_arm = _Block_with_two_input(input_dim=352, BatchNorm=BatchNorm)
-        self.left_hand = _Block_with_two_input(input_dim=352, BatchNorm=BatchNorm)
-        self.right_hand = _Block_with_two_input(input_dim=352, BatchNorm=BatchNorm)
-        self.left_leg = _Block_with_two_input(input_dim=352, BatchNorm=BatchNorm)
-        self.right_leg = _Block_with_two_input(input_dim=352, BatchNorm=BatchNorm)
-        self.left_feet = _Block_with_two_input(input_dim=352, BatchNorm=BatchNorm)
-        self.right_feet = _Block_with_two_input(input_dim=352, BatchNorm=BatchNorm)
+        self.face = _Block_with_two_input(input_dim=400, BatchNorm=BatchNorm)
+        self.hair = _Block_with_two_input(input_dim=400, BatchNorm=BatchNorm)
+        self.left_arm = _Block_with_two_input(input_dim=400, BatchNorm=BatchNorm)
+        self.right_arm = _Block_with_two_input(input_dim=400, BatchNorm=BatchNorm)
+        self.left_hand = _Block_with_two_input(input_dim=400, BatchNorm=BatchNorm)
+        self.right_hand = _Block_with_two_input(input_dim=400, BatchNorm=BatchNorm)
+        self.left_leg = _Block_with_two_input(input_dim=400, BatchNorm=BatchNorm)
+        self.right_leg = _Block_with_two_input(input_dim=400, BatchNorm=BatchNorm)
+        self.left_feet = _Block_with_two_input(input_dim=400, BatchNorm=BatchNorm)
+        self.right_feet = _Block_with_two_input(input_dim=400, BatchNorm=BatchNorm)
         self.accessory = _Block_with_one_input(input_dim=304, BatchNorm=BatchNorm)
         self.backgroud = _Block_with_one_input(input_dim=304, BatchNorm=BatchNorm)
         """
@@ -223,7 +226,7 @@ def build_kinematic_graph(BatchNorm):
 
 
 if __name__ == '__main__':
-    #from tensorboardX import SummaryWriter
+    # from tensorboardX import SummaryWriter
     from torch.utils.tensorboard import SummaryWriter
 
     batchnorm = nn.BatchNorm2d

@@ -24,6 +24,9 @@ def decode_segmap(label_mask, dataset, plot=False):
     if dataset == 'occ5000':
         n_classes = 13
         label_colours = get_occ5000_labels()
+    elif dataset == 'cihp':
+        n_classes = 20
+        label_colours = get_cihp_labels()
     elif dataset == 'pascal' or dataset == 'coco':
         n_classes = 21
         label_colours = get_pascal_labels()
@@ -41,9 +44,14 @@ def decode_segmap(label_mask, dataset, plot=False):
         g[label_mask == ll] = label_colours[ll, 1]
         b[label_mask == ll] = label_colours[ll, 2]
     rgb = np.zeros((label_mask.shape[0], label_mask.shape[1], 3))
-    rgb[:, :, 0] = r / 255.0
-    rgb[:, :, 1] = g / 255.0
-    rgb[:, :, 2] = b / 255.0
+    if r.max() <= 1:
+        rgb[:, :, 0] = r
+        rgb[:, :, 1] = g
+        rgb[:, :, 2] = b
+    else:
+        rgb[:, :, 0] = r / 255.0
+        rgb[:, :, 1] = g / 255.0
+        rgb[:, :, 2] = b / 255.0
     if plot:
         plt.imshow(rgb)
         plt.show()
@@ -90,6 +98,25 @@ def get_cityscapes_labels():
         [0, 0, 230],
         [119, 11, 32]])
 
+def get_cihp_labels():
+    """Load the mapping that associates pascal classes with label colors
+    Returns:
+        np.ndarray with dimensions (20, 3)
+    """
+    return np.asarray([[0, 0, 0], [0.5, 0, 0], [0.9961, 0, 0], [0, 0.3320, 0],
+                       [0.6641, 0, 0.1992], [0.9961, 0.3320, 0], [0, 0, 0.3320],
+                       [0, 0.4648, 0.8633], [0.3320, 0.3320, 0], [0, 0.3320, 0.3320],
+                       [0.3320, 0.1992, 0], [0.2031, 0.3359, 0.5], [0, 0.5, 0],
+                       [0, 0, 0.9961], [0.1992, 0.6641, 0.8633], [0, 0.9961, 0.9961],
+                       [0.3320, 0.9961, 0.6641], [0.6641, 0.9961, 0.3320],[0.9961, 0.9961, 0],
+                       [0.9961, 0.6641, 0]])
+    # return np.asarray([[0, 0, 0], [0.5, 0, 0], [0.9961, 0, 0], [0, 0.3320, 0],
+    #                    [0.6641, 0, 0.1992], [0.9961, 0.3320, 0], [0, 0, 0.3320],
+    #                    [0, 0.4648, 0.8633], [0.3320, 0.3320, 0], [0, 0.3320, 0.3320],
+    #                    [0.3320, 0.1992, 0], [0.2031, 0.3359, 0.5], [0, 0.5, 0],
+    #                    [0, 0, 0.9961], [0.1992, 0.6641, 0.8633], [0, 0.9961, 0.9961],
+    #                    [0.3320, 0.9961, 0.6641], [0.6641, 0.9961, 0.3320],[0.9961, 0.9961, 0],
+    #                    [0.9961, 0.6641, 0]])
 
 def get_pascal_labels():
     """Load the mapping that associates pascal classes with label colors

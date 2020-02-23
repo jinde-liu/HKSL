@@ -103,14 +103,15 @@ class RandomScaleCrop(object):
     def __call__(self, sample):
         img = sample['image']
         mask = sample['label']
-        short_size = random.randint(int(self.base_size[0] * self.scale_ratio[0]), int(self.base_size[0] * self.scale_ratio[1]))
+        #short_size = random.randint(int(self.base_size[0] * self.scale_ratio[0]), int(self.base_size[0] * self.scale_ratio[1]))
         w, h = img.size
+        # resize based on long side
         if h > w:
-            ow = short_size
-            oh = int(1.0 * h * ow / w)
-        else:
-            oh = short_size
+            oh = random.randint(int(self.base_size[0] * self.scale_ratio[0]), int(self.base_size[0] * self.scale_ratio[1]))
             ow = int(1.0 * w * oh / h)
+        else:
+            ow = random.randint(int(self.base_size[1] * self.scale_ratio[0]), int(self.base_size[1] * self.scale_ratio[1]))
+            oh = int(1.0 * h * ow / w)
         img = img.resize((ow, oh), Image.BILINEAR)
         mask = mask.resize((ow, oh), Image.NEAREST)
         # pad crop with fill
@@ -136,7 +137,8 @@ class FixScaleCrop(object):
     Rescale original image to crop size based on short edge, and then center crop
     crop_size: crop size
     """
-    def __init__(self, crop_size, fill=0):
+    def __init__(self, base_size, crop_size, fill=0):
+        self.base_size = base_size
         self.crop_size = crop_size
         self.fill = fill
 
@@ -144,11 +146,26 @@ class FixScaleCrop(object):
         img = sample['image']
         mask = sample['label']
         w, h = img.size
-        assert (w < self.crop_size[1] and h < self.crop_size[0]), 'crop size must larger than image size'
-        padh = self.crop_size[0] - h if h < self.crop_size[0] else 0
-        padw = self.crop_size[1] - w if w < self.crop_size[1] else 0
-        img = ImageOps.expand(img, border=(0, 0, padw, padh), fill=0)
-        mask = ImageOps.expand(mask, border=(0, 0, padw, padh), fill=self.fill)
+        # resize based on lone side
+        if h > w:
+            oh = self.base_size[0]
+            ow = int(1.0 * w * oh / h)
+        else:
+            ow = self.base_size[1]
+            oh = int(1.0 * h * ow / w)
+        img = img.resize((ow, oh), Image.BILINEAR)
+        mask = mask.resize((ow, oh), Image.NEAREST)
+        w, h = img.size
+        if h < self.crop_size[0] or w < self.crop_size[1]:
+            padh = self.crop_size[0] - h if h < self.crop_size[0] else 0
+            padw = self.crop_size[1] - w if w < self.crop_size[1] else 0
+            img = ImageOps.expand(img, border=(0, 0, padw, padh), fill=0)
+            mask = ImageOps.expand(mask, border=(0, 0, padw, padh), fill=self.fill)
+        # assert (w < self.crop_size[1] and h < self.crop_size[0]), 'crop size must larger than image size'
+        # padh = self.crop_size[0] - h if h < self.crop_size[0] else 0
+        # padw = self.crop_size[1] - w if w < self.crop_size[1] else 0
+        # img = ImageOps.expand(img, border=(0, 0, padw, padh), fill=0)
+        # mask = ImageOps.expand(mask, border=(0, 0, padw, padh), fill=self.fill)
         x1 = 0
         y1 = 0
         img = img.crop((x1, y1, x1 + self.crop_size[1], y1 + self.crop_size[0]))
@@ -159,7 +176,7 @@ class FixScaleCrop(object):
 
 class FixedResize(object):
     def __init__(self, size):
-        self.size = (size, size)  # size: (h, w)
+        self.size = size  # size: (h, w)
 
     def __call__(self, sample):
         img = sample['image']
